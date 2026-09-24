@@ -1,0 +1,1012 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мои цели — План месяца</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+            background: #f5f6fa;
+            color: #202124;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: min(100% - 30px, 1000px);
+            margin: 0 auto;
+            padding: 30px 0 50px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        header h1 {
+            font-size: 34px;
+            margin-bottom: 8px;
+        }
+
+        header p {
+            color: #70757a;
+            font-size: 16px;
+        }
+
+        .month-box {
+            background: white;
+            border-radius: 18px;
+            padding: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            box-shadow: 0 4px 18px rgba(0,0,0,0.06);
+            margin-bottom: 20px;
+        }
+
+        .month-box button {
+            border: none;
+            background: #f0f1f5;
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            font-size: 22px;
+            cursor: pointer;
+        }
+
+        .month-box button:hover {
+            background: #e4e5ea;
+        }
+
+        #monthTitle {
+            font-size: 22px;
+            font-weight: 700;
+            text-transform: capitalize;
+        }
+
+        .add-goal {
+            background: white;
+            border-radius: 18px;
+            padding: 20px;
+            box-shadow: 0 4px 18px rgba(0,0,0,0.06);
+            margin-bottom: 20px;
+        }
+
+        .add-goal h2 {
+            font-size: 19px;
+            margin-bottom: 15px;
+        }
+
+        .form {
+            display: grid;
+            grid-template-columns: 1fr 180px 150px;
+            gap: 10px;
+        }
+
+        input,
+        select {
+            width: 100%;
+            border: 1px solid #dddfe5;
+            border-radius: 11px;
+            padding: 13px 14px;
+            font-size: 15px;
+            outline: none;
+            background: white;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: #6c63ff;
+        }
+
+        .primary-btn {
+            border: none;
+            border-radius: 11px;
+            background: #6c63ff;
+            color: white;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            padding: 13px 15px;
+        }
+
+        .primary-btn:hover {
+            background: #574ff0;
+        }
+
+        .goals {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .empty {
+            background: white;
+            border-radius: 18px;
+            padding: 40px 20px;
+            text-align: center;
+            color: #777;
+            box-shadow: 0 4px 18px rgba(0,0,0,0.05);
+        }
+
+        .empty-icon {
+            font-size: 45px;
+            margin-bottom: 10px;
+        }
+
+        .goal {
+            background: white;
+            border-radius: 18px;
+            padding: 18px;
+            box-shadow: 0 4px 18px rgba(0,0,0,0.05);
+        }
+
+        .goal-top {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 15px;
+        }
+
+        .goal-name {
+            font-size: 18px;
+            font-weight: 700;
+            word-break: break-word;
+        }
+
+        .goal-plan {
+            color: #777;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .delete-btn {
+            border: none;
+            background: transparent;
+            font-size: 20px;
+            cursor: pointer;
+            opacity: 0.55;
+        }
+
+        .delete-btn:hover {
+            opacity: 1;
+        }
+
+        .progress-info {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 18px;
+            margin-bottom: 8px;
+        }
+
+        .progress-numbers {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .percentage {
+            font-size: 17px;
+            font-weight: 700;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 11px;
+            background: #ececf1;
+            border-radius: 20px;
+            overflow: hidden;
+            margin-bottom: 14px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: #6c63ff;
+            border-radius: 20px;
+            transition: width 0.25s ease;
+        }
+
+        .progress-fill.complete {
+            background: #20a464;
+        }
+
+        .goal-actions {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .counter-btn {
+            width: 45px;
+            height: 42px;
+            border: none;
+            border-radius: 11px;
+            background: #f0f1f5;
+            font-size: 22px;
+            cursor: pointer;
+        }
+
+        .counter-btn:hover {
+            background: #e3e4e9;
+        }
+
+        .counter {
+            min-width: 80px;
+            text-align: center;
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .summary {
+            margin-top: 22px;
+            background: #202124;
+            color: white;
+            border-radius: 20px;
+            padding: 22px;
+        }
+
+        .summary h2 {
+            font-size: 21px;
+            margin-bottom: 18px;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        .summary-item {
+            background: rgba(255,255,255,0.08);
+            border-radius: 14px;
+            padding: 15px;
+        }
+
+        .summary-item .label {
+            font-size: 13px;
+            opacity: 0.7;
+            margin-bottom: 7px;
+        }
+
+        .summary-item .value {
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .month-result {
+            margin-top: 18px;
+            padding: 15px;
+            border-radius: 13px;
+            background: rgba(255,255,255,0.08);
+            text-align: center;
+        }
+
+        .month-result strong {
+            font-size: 22px;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 25px;
+            color: #888;
+            font-size: 13px;
+        }
+
+        @media (max-width: 700px) {
+            .container {
+                width: min(100% - 20px, 1000px);
+                padding-top: 20px;
+            }
+
+            header h1 {
+                font-size: 28px;
+            }
+
+            .form {
+                grid-template-columns: 1fr;
+            }
+
+            .summary-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .month-box {
+                padding: 12px;
+            }
+
+            #monthTitle {
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <header>
+        <h1>🎯 Мои цели</h1>
+        <p>Планируй месяц и смотри свой результат</p>
+    </header>
+
+    <div class="month-box">
+        <button id="prevMonth">‹</button>
+
+        <div id="monthTitle"></div>
+
+        <button id="nextMonth">›</button>
+    </div>
+
+    <div class="add-goal">
+        <h2>➕ Добавить цель</h2>
+
+        <form id="goalForm" class="form">
+
+            <input
+                id="goalName"
+                type="text"
+                placeholder="Например: Прочитать книги"
+                maxlength="100"
+                required
+            >
+
+            <input
+                id="goalPlan"
+                type="number"
+                min="1"
+                max="1000000"
+                placeholder="План"
+                required
+            >
+
+            <button class="primary-btn" type="submit">
+                Добавить
+            </button>
+
+        </form>
+    </div>
+
+    <div id="goals" class="goals"></div>
+
+    <div class="summary">
+
+        <h2>📊 Итог месяца</h2>
+
+        <div class="summary-grid">
+
+            <div class="summary-item">
+                <div class="label">Целей</div>
+                <div class="value" id="totalGoals">0</div>
+            </div>
+
+            <div class="summary-item">
+                <div class="label">Выполнено</div>
+                <div class="value" id="completedGoals">0</div>
+            </div>
+
+            <div class="summary-item">
+                <div class="label">Средний результат</div>
+                <div class="value" id="averageProgress">0%</div>
+            </div>
+
+        </div>
+
+        <div class="month-result">
+            <div>Результат месяца</div>
+            <strong id="monthResult">Пока нет целей</strong>
+        </div>
+
+    </div>
+
+    <div class="footer">
+        Данные сохраняются автоматически на этом устройстве.
+    </div>
+
+</div>
+
+
+<script>
+
+    /*
+     * ==========================================
+     * НАСТРОЙКИ
+     * ==========================================
+     */
+
+    const STORAGE_KEY = "my_monthly_goals_v1";
+
+
+    /*
+     * ==========================================
+     * СОСТОЯНИЕ
+     * ==========================================
+     */
+
+    let currentDate = new Date();
+
+    let data = loadData();
+
+
+    /*
+     * ==========================================
+     * ЭЛЕМЕНТЫ
+     * ==========================================
+     */
+
+    const monthTitle = document.getElementById("monthTitle");
+    const goalsContainer = document.getElementById("goals");
+
+    const goalForm = document.getElementById("goalForm");
+    const goalName = document.getElementById("goalName");
+    const goalPlan = document.getElementById("goalPlan");
+
+    const prevMonth = document.getElementById("prevMonth");
+    const nextMonth = document.getElementById("nextMonth");
+
+    const totalGoals = document.getElementById("totalGoals");
+    const completedGoals = document.getElementById("completedGoals");
+    const averageProgress = document.getElementById("averageProgress");
+    const monthResult = document.getElementById("monthResult");
+
+
+    /*
+     * ==========================================
+     * МЕСЯЦ
+     * ==========================================
+     */
+
+    const monthNames = [
+        "январь",
+        "февраль",
+        "март",
+        "апрель",
+        "май",
+        "июнь",
+        "июль",
+        "август",
+        "сентябрь",
+        "октябрь",
+        "ноябрь",
+        "декабрь"
+    ];
+
+
+    function getMonthKey() {
+
+        const year = currentDate.getFullYear();
+        const month = String(currentDate.getMonth() + 1).padStart(2, "0");
+
+        return `${year}-${month}`;
+
+    }
+
+
+    function updateMonthTitle() {
+
+        const month = monthNames[currentDate.getMonth()];
+        const year = currentDate.getFullYear();
+
+        monthTitle.textContent = `${month} ${year}`;
+
+    }
+
+
+    /*
+     * ==========================================
+     * СОХРАНЕНИЕ
+     * ==========================================
+     */
+
+    function loadData() {
+
+        try {
+
+            const saved = localStorage.getItem(STORAGE_KEY);
+
+            if (!saved) {
+                return {};
+            }
+
+            return JSON.parse(saved);
+
+        } catch (error) {
+
+            console.error("Ошибка загрузки:", error);
+
+            return {};
+
+        }
+
+    }
+
+
+    function saveData() {
+
+        localStorage.setItem(
+            STORAGE_KEY,
+            JSON.stringify(data)
+        );
+
+    }
+
+
+    /*
+     * ==========================================
+     * ПОЛУЧЕНИЕ ЦЕЛЕЙ
+     * ==========================================
+     */
+
+    function getGoals() {
+
+        const key = getMonthKey();
+
+        if (!data[key]) {
+            data[key] = [];
+        }
+
+        return data[key];
+
+    }
+
+
+    /*
+     * ==========================================
+     * ДОБАВЛЕНИЕ ЦЕЛИ
+     * ==========================================
+     */
+
+    goalForm.addEventListener("submit", function(event) {
+
+        event.preventDefault();
+
+        const name = goalName.value.trim();
+        const plan = Number(goalPlan.value);
+
+        if (!name) {
+            return;
+        }
+
+        if (!Number.isFinite(plan) || plan <= 0) {
+            alert("Укажи план больше нуля.");
+            return;
+        }
+
+        const goals = getGoals();
+
+        goals.push({
+
+            id: Date.now(),
+
+            name: name,
+
+            plan: Math.floor(plan),
+
+            completed: 0
+
+        });
+
+        saveData();
+
+        goalName.value = "";
+        goalPlan.value = "";
+
+        render();
+
+        goalName.focus();
+
+    });
+
+
+    /*
+     * ==========================================
+     * ИЗМЕНЕНИЕ ВЫПОЛНЕНИЯ
+     * ==========================================
+     */
+
+    function changeProgress(id, amount) {
+
+        const goals = getGoals();
+
+        const goal = goals.find(item => item.id === id);
+
+        if (!goal) {
+            return;
+        }
+
+        goal.completed += amount;
+
+        if (goal.completed < 0) {
+            goal.completed = 0;
+        }
+
+        /*
+         * Можно выполнить больше плана,
+         * но для расчёта процента максимум будет 100%.
+         */
+
+        saveData();
+
+        render();
+
+    }
+
+
+    /*
+     * ==========================================
+     * УДАЛЕНИЕ ЦЕЛИ
+     * ==========================================
+     */
+
+    function deleteGoal(id) {
+
+        const goals = getGoals();
+
+        const goal = goals.find(item => item.id === id);
+
+        if (!goal) {
+            return;
+        }
+
+        const answer = confirm(
+            `Удалить цель «${goal.name}»?`
+        );
+
+        if (!answer) {
+            return;
+        }
+
+        data[getMonthKey()] =
+            goals.filter(item => item.id !== id);
+
+        saveData();
+
+        render();
+
+    }
+
+
+    /*
+     * ==========================================
+     * ПРОЦЕНТ
+     * ==========================================
+     */
+
+    function getProgress(goal) {
+
+        if (goal.plan <= 0) {
+            return 0;
+        }
+
+        return Math.min(
+            100,
+            Math.round(
+                (goal.completed / goal.plan) * 100
+            )
+        );
+
+    }
+
+
+    /*
+     * ==========================================
+     * ОТРИСОВКА
+     * ==========================================
+     */
+
+    function render() {
+
+        updateMonthTitle();
+
+        const goals = getGoals();
+
+        goalsContainer.innerHTML = "";
+
+        if (goals.length === 0) {
+
+            goalsContainer.innerHTML = `
+                <div class="empty">
+
+                    <div class="empty-icon">🎯</div>
+
+                    <div>
+                        Пока нет целей на этот месяц.
+                    </div>
+
+                    <div style="margin-top:6px;">
+                        Добавь первую цель выше.
+                    </div>
+
+                </div>
+            `;
+
+            updateSummary();
+
+            return;
+        }
+
+
+        goals.forEach(goal => {
+
+            const progress = getProgress(goal);
+
+            const card = document.createElement("div");
+
+            card.className = "goal";
+
+            card.innerHTML = `
+
+                <div class="goal-top">
+
+                    <div>
+
+                        <div class="goal-name">
+                            ${escapeHTML(goal.name)}
+                        </div>
+
+                        <div class="goal-plan">
+                            План: ${goal.plan}
+                        </div>
+
+                    </div>
+
+                    <button
+                        class="delete-btn"
+                        title="Удалить"
+                        type="button"
+                    >
+                        🗑️
+                    </button>
+
+                </div>
+
+
+                <div class="progress-info">
+
+                    <div class="progress-numbers">
+                        Выполнено:
+                        <strong>
+                            ${goal.completed}
+                        </strong>
+                        / ${goal.plan}
+                    </div>
+
+                    <div class="percentage">
+                        ${progress}%
+                    </div>
+
+                </div>
+
+
+                <div class="progress-bar">
+
+                    <div
+                        class="progress-fill ${progress >= 100 ? "complete" : ""}"
+                        style="width:${progress}%"
+                    ></div>
+
+                </div>
+
+
+                <div class="goal-actions">
+
+                    <button
+                        class="counter-btn minus"
+                        type="button"
+                    >
+                        −
+                    </button>
+
+                    <div class="counter">
+                        ${goal.completed}
+                    </div>
+
+                    <button
+                        class="counter-btn plus"
+                        type="button"
+                    >
+                        +
+                    </button>
+
+                </div>
+
+            `;
+
+
+            /*
+             * Кнопка удаления
+             */
+
+            card
+                .querySelector(".delete-btn")
+                .addEventListener("click", () => {
+
+                    deleteGoal(goal.id);
+
+                });
+
+
+            /*
+             * Минус
+             */
+
+            card
+                .querySelector(".minus")
+                .addEventListener("click", () => {
+
+                    changeProgress(
+                        goal.id,
+                        -1
+                    );
+
+                });
+
+
+            /*
+             * Плюс
+             */
+
+            card
+                .querySelector(".plus")
+                .addEventListener("click", () => {
+
+                    changeProgress(
+                        goal.id,
+                        1
+                    );
+
+                });
+
+
+            goalsContainer.appendChild(card);
+
+        });
+
+
+        updateSummary();
+
+    }
+
+
+    /*
+     * ==========================================
+     * ИТОГ МЕСЯЦА
+     * ==========================================
+     */
+
+    function updateSummary() {
+
+        const goals = getGoals();
+
+        const count = goals.length;
+
+        const completed = goals.filter(
+            goal => goal.completed >= goal.plan
+        ).length;
+
+
+        let average = 0;
+
+        if (count > 0) {
+
+            const total = goals.reduce(
+                (sum, goal) => {
+
+                    return sum + getProgress(goal);
+
+                },
+                0
+            );
+
+            average = Math.round(total / count);
+
+        }
+
+
+        totalGoals.textContent = count;
+
+        completedGoals.textContent =
+            `${completed}/${count}`;
+
+        averageProgress.textContent =
+            `${average}%`;
+
+
+        if (count === 0) {
+
+            monthResult.textContent =
+                "Пока нет целей";
+
+        } else if (completed === count) {
+
+            monthResult.textContent =
+                "🎉 Все цели выполнены!";
+
+        } else if (average >= 80) {
+
+            monthResult.textContent =
+                "🔥 Отличный результат!";
+
+        } else if (average >= 50) {
+
+            monthResult.textContent =
+                "💪 Хороший прогресс!";
+
+        } else {
+
+            monthResult.textContent =
+                "🚀 Продолжай двигаться вперёд!";
+
+        }
+
+    }
+
+
+    /*
+     * ==========================================
+     * ПЕРЕКЛЮЧЕНИЕ МЕСЯЦЕВ
+     * ==========================================
+     */
+
+    prevMonth.addEventListener("click", function() {
+
+        currentDate.setMonth(
+            currentDate.getMonth() - 1
+        );
+
+        render();
+
+    });
+
+
+    nextMonth.addEventListener("click", function() {
+
+        currentDate.setMonth(
+            currentDate.getMonth() + 1
+        );
+
+        render();
+
+    });
+
+
+    /*
+     * ==========================================
+     * ЗАЩИТА ОТ HTML
+     * ==========================================
+     */
+
+    function escapeHTML(text) {
+
+        return String(text)
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+
+    }
+
+
+    /*
+     * ==========================================
+     * ЗАПУСК
+     * ==========================================
+     */
+
+    render();
+
+</script>
+
+</body>
+</html>
